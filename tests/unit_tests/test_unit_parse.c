@@ -162,6 +162,12 @@ void ush_print_status(struct ush_object *self, ush_status_t status)
         ush_print_status_call_count++;
 }
 
+void ush_printf(struct ush_object *self, const char *format, ...)
+{
+        TEST_ASSERT_EQUAL(&ush, self);
+        format = format;
+}
+
 void test_ush_parse_finish(void)
 {
         setUp();

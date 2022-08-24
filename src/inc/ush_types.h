@@ -41,6 +41,8 @@ extern "C" {
 #define USH_STRING(s)   USH_STRING_(s)
 #define USH_STRING_(s)  #s
 
+#define SHELL_STATUS_MASK 0xFF
+
 /** State values enumerators for return values. */
 typedef enum {
         USH_STATUS_OK,                                  /**< Successfull operation */
@@ -119,6 +121,21 @@ struct ush_file_descriptor;
 typedef void (*ush_file_execute_callback)(struct ush_object *self, struct ush_file_descriptor const *file, int argc, char *argv[]);
 
 /**
+ * @brief File execute callback, returning status.
+ *
+ * Function is called from ush service context when command or file is executed.
+ * Before called, command arguments was parsed (text only).
+ *
+ * @param self - pointer to master ush object
+ * @param file - pointer to processed file descriptor
+ * @param argc - number of parsed text arguments
+ * @param argv - pointer to array of text arguments (zero-ended)
+ *
+ * @return should return 0 on successful, 1 on failure
+ */
+typedef uint32_t (*ush_file_execute_callback_stat)(struct ush_object *self, struct ush_file_descriptor const *file, int argc, char *argv[]);
+
+/**
  * @brief File process service callback.
  * 
  * Function is called from ush service context when command entered to processing state.
@@ -169,6 +186,7 @@ struct ush_file_descriptor {
         char const *help;                               /**< Pointer to file help manual (optional) */
 
         ush_file_execute_callback exec;                 /**< File execute callback (optional) */
+        ush_file_execute_callback_stat exec_stat;       /**< File execute callback, return status (optional) */
         ush_file_data_getter get_data;                  /**< File data getter callback (optional) */
         ush_file_data_setter set_data;                  /**< File data setter callback (optional) */
         ush_file_process_service process;               /**< File process service callback (optional) */

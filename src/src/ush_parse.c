@@ -49,12 +49,17 @@ void ush_parse_finish(struct ush_object *self)
                 return;
         }
 
-        if (file->exec == NULL) {
-                ush_print_status(self, USH_STATUS_ERROR_FILE_NOT_EXECUTABLE);
-                return;
+        if (file->exec != NULL) {
+                file->exec(self, file, argc, argv);
+        } else {
+                if (file->exec_stat != NULL) {
+                        int res = file->exec_stat(self, file, argc, argv);
+                        if ((res && SHELL_STATUS_MASK) != EXIT_SUCCESS)
+                                ush_printf(self, "EXEC_ERROR: %d\r\n", res);
+                } else {
+                        ush_print_status(self, USH_STATUS_ERROR_FILE_NOT_EXECUTABLE);
+                }
         }
-        
-        file->exec(self, file, argc, argv);
 }
 
 bool ush_parse_service(struct ush_object *self)
