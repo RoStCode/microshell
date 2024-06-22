@@ -238,7 +238,7 @@ void test_ush_autocomp_check_for_finish(void)
                         ush.process_stage = i;
 
                         struct ush_node_object node = {0};
-                        node.childs = (struct ush_node_object*)1234;
+                        node.children = (struct ush_node_object*)1234;
 
                         ush.process_index = 10;
                         ush.process_index_item = 20;
@@ -261,7 +261,7 @@ void test_ush_autocomp_check_for_finish(void)
                         ush.process_stage = i;
 
                         struct ush_node_object node_current = {0};
-                        node_current.childs = (struct ush_node_object*)5678;
+                        node_current.children = (struct ush_node_object*)5678;
 
                         ush.process_index = 10;
                         ush.process_index_item = 20;
@@ -631,7 +631,6 @@ void test_ush_autocomp_process_file_index(void)
         for (int i = 0; i < 10; i++) {
                 setUp();
                 ush.process_index = i;
-                ush.process_node = &node;
 
                 switch (i) {
                 case 0:
